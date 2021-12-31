@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF -8 ">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SMART HOME</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel= "stylesheet" href="./style.css">
+   
+    
+</head>
+
+<body background="img/lab2-backgr.gif">
+   <div  class= "container">
+            <header>
+                <a href="logo"><img src="img/lab2-1.PNG"></a>
+            </header>
+        
+            <slogan>
+                <div id="tieude">
+                    <h2><b>SMART HOME</b></h2>
+                </div>
+            </slogan>
+           
+            <bang>
+                <div class="row">
+                    <div id="box1">
+                        <div id="khung1">
+                            <h1><b>Nhiệt Độ</b></h1>
+                            <h1 id ="nhietdo"></h1>
+                        </div>
+                        <div id= "khung3" >
+                            <h1><b>Không khí</b></h1>
+                            <h1 id = "khongkhi"></h1>
+                        </div>
+                        <img src="img/lab2-quatoff.png" class="lab2-quaton" id="quat" alt="">
+                        <button type="button" id="btn1"class="btn waves-effect waves-lights">ON</button>
+                        <button type="button" id="btn2"class="btn waves-effect waves-lights">OFF</button>
+                        </div>
+                    
+                    
+                    <div id="box2">
+                        <div id="khung2" >
+                            <h1><b>Độ ẩm</b></h1>
+                            <h1 id="doam"></h1>
+                        </div>
+                        <img src="img/lab2-denoff.jpg" class="denon" id="tuoi" alt="">
+                        <img src="img/airconditionoff.png" class="maylanhon" id="maylanh" alt="">
+                        <button type="button" id="btn3"class="btn waves-effect waves-lights">ON</button>
+                        <button type="button" id="btn4"class="btn waves-effect waves-lights">OFF</button>
+                        <button type="button" id="btn5"class="btn waves-effect waves-lights">ON</button>
+                        <button type="button" id="btn6"class="btn waves-effect waves-lights">OFF</button>
+
+                    </div>
+                </div>
+            </bang>
+
+    <footer>
+               
+                    
+     </footer>      
+    </div>
+
+    <script type="module">
+     // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.5.0/firebase-app.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyB4AQohzuoGIoJ8yaZz-q8BbBlbe3S1s6Y",
+    authDomain: "hongphu-doan.firebaseapp.com",
+    databaseURL: "https://hongphu-doan-default-rtdb.firebaseio.com",
+    projectId: "hongphu-doan",
+    storageBucket: "hongphu-doan.appspot.com",
+    messagingSenderId: "634646302",
+    appId: "1:634646302:web:babbf526c880c59942230f",
+    measurementId: "G-8RTLLL820S"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  import {getDatabase, ref, get, set, onValue, child, update, remove} 
+  from "https://www.gstatic.com/firebasejs/9.5.0/firebase-database.js";
+        const db = getDatabase();
+
+        var Btn1 = document.getElementById("btn1")
+        var Btn2 = document.getElementById("btn2")
+        var Btn3 = document.getElementById("btn3")
+        var Btn4 = document.getElementById("btn4")
+        var Btn5 = document.getElementById("btn5")
+        var Btn6 = document.getElementById("btn6")
+
+
+
+
+        var onquat = "batquat";
+   var offquat = "tatquat";
+   var onden = "on";
+   var offden = "off";
+   var onmaylanh ="11";
+   var offmaylanh = "22";
+   var stateAir = false;
+   function InsertData(){
+    document.getElementById("quat").setAttribute("src","./img/lab2-quaton.png");
+       set(ref(db,"hahaha"),{
+Den: onquat,
+
+       })
+    
+   }
+   
+   Btn1.addEventListener('click', InsertData);
+   function offquat1(){
+    document.getElementById("quat").setAttribute("src","./img/lab2-quatoff.png");
+    
+
+       set(ref(db,"hahaha"),{
+          Den: offquat,
+         
+       })
+   }
+   Btn2.addEventListener('click', offquat1)
+
+   function onden1(){
+
+    document.getElementById("tuoi").setAttribute("src","./img/sang.png");
+       set(ref(db,"hahaha"),{
+           Den: onden,
+ 
+       })
+   }
+Btn3.addEventListener('click', onden1)
+
+function offden1(){
+    document.getElementById("tuoi").setAttribute("src","./img/lab2-denoff.jpg");
+       set(ref(db,"hahaha"),{
+           Den: offden,
+       })
+   }
+Btn4.addEventListener('click', offden1)
+
+function onmaylanh1(){
+
+document.getElementById("maylanh").setAttribute("src","./img/aircondition.png");
+   set(ref(db,"hahaha"),{
+       Den: onmaylanh,
+  
+   })
+}
+Btn5.addEventListener('click', onmaylanh1)
+
+function offmaylanh1(){
+    document.getElementById("maylanh").setAttribute("src","./img/airconditionoff.png");
+       set(ref(db,"hahaha"),{
+           Den: offmaylanh,
+       })
+   }
+
+   Btn6.addEventListener('click', offmaylanh1)
+     //********************************* web lấy dữ liệu***********************************************//
+
+  
+    
+
+const ktden = ref(db,'hahaha/'+'/Den');
+onValue(ktden,(snapshot)=>{
+    const trangthai = snapshot.val();
+    if(trangthai == "\"off\""){
+        document.getElementById("tuoi").setAttribute("src","./img/lab2-denoff.jpg");
+    }
+    if(trangthai == '\"on\"'){
+        document.getElementById("tuoi").setAttribute("src","./img/sang.png");
+    }
+    if(trangthai == '\"batquat\"'){
+        document.getElementById("quat").setAttribute("src","./img/lab2-quaton.png");
+    }
+    if(trangthai == '\"tatquat\"'){
+        document.getElementById("quat").setAttribute("src","./img/lab2-quatoff.png");
+    }
+    if(trangthai == '\"11\"'){
+        document.getElementById("maylanh").setAttribute("src","./img/aircondition.png");
+    }
+    if(trangthai == '\"22\"'){
+        document.getElementById("maylanh").setAttribute("src","./img/airconditionoff.png");
+    }
+
+})
+ 
+        
+const starCountRef = ref(db, 'taolao/temp' );
+onValue(starCountRef, (snapshot) => {
+ const nhietdonhan = snapshot.val();
+  document.getElementById("nhietdo").innerText = nhietdonhan+" °C";
+});
+
+   
+
+
+
+
+const getdoam = ref(db, 'taolao/doam' );
+onValue(getdoam, (snapshot) => {
+ 
+  document.getElementById("doam").innerText = snapshot.val()+" %";
+});
+
+const getkhongkhi = ref(db, 'taolao/Không khí' );
+onValue(getkhongkhi, (snapshot) => {
+ 
+  document.getElementById("khongkhi").innerText = snapshot.val()+" PPM";
+});
+
+
+
+</script>
+
+</body>
+</html>
